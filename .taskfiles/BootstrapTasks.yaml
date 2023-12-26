@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+---
+version: "3"
+
+tasks:
+  deps:
+    desc: Manage dependencies
+    preconditions:
+      - sh: command -v poetry
+        msg: poetry is not installed.
+    cmds:
+      # Python dependency
+      - poetry install --no-root
+      - poetry run ansible-galaxy install --force --role-file {{.ROOT_DIR}}/requirements.yaml
