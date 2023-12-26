@@ -1,0 +1,11 @@
+---
+extends: default
+
+ignore: |
+  *.sops.*
+
+rules:
+  line-length: disable
+  comments-indentation: disable
+  truthy:
+    allowed-values: ["true", "false"]
