@@ -1,0 +1,29 @@
+---
+
+- name: OpenSSH | install openssh
+  ansible.builtin.package:
+    name: openssh-server
+    state: present
+
+- name: OpenSSH | configure openssh
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config.d/ansible.conf
+    state: present
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    validate: sshd -f %s -t
+    create: true
+    mode: "0644"
+  with_items:
+    - {regexp: "^PermitRootLogin", line: "PermitRootLogin {{ debian_openssh_permit_root_login }}"}  # Disable root password authentication
+    - {regexp: "^PasswordAuthentication", line: "PasswordAuthentication no"}  # Disallow SSH password authentication
+    - {regexp: "^Port", line: "Port {{ debian_openssh_port }}"}  # Port
+    - {regexp: "^ClientAliveInterval", line: "ClientAliveInterval 30"}  # ClientAliveInterval
+    - {regexp: "^ClientAliveCountMax", line: "ClientAliveCountMax 12"}  # ClientAliveCountMax
+  register: _openssh_configure
+
+- name: OpenSSH | restart openssh
+  ansible.builtin.service:
+    name: ssh
+    state: restarted
+  changed_when: _openssh_configure.changed

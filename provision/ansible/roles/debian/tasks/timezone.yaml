@@ -1,0 +1,5 @@
+---
+
+- name: Timezone | update timezone
+  community.general.timezone:
+    name: "{{ debian_timezone }}"

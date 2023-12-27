@@ -1,0 +1,11 @@
+---
+# timezone
+debian_timezone: UTC
+
+# package
+debian_apt_repositories: []
+debian_apt_packages: []
+
+# openssh
+debian_openssh_port: 22
+debian_openssh_permit_root_login: prohibit-password  # yes, no, prohibit-password

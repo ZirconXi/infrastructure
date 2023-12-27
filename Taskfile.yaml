@@ -10,6 +10,7 @@ vars:
   SECRETS_DIR: "{{.ROOT_DIR}}/secrets"
 
 includes:
+  ansible: .taskfiles/AnsibleTasks.yaml
   bootstrap: .taskfiles/BootstrapTasks.yaml
   precommit: .taskfiles/PrecommitTasks.yaml
   sops: .taskfiles/SopsTasks.yaml
