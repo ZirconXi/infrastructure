@@ -3,3 +3,6 @@ creation_rules:
   - path_regex: secrets/.*\.sops\.yaml$
     unencrypted_regex: "^(kind)$"
     age: "age10kjypcen2ay6r3sgt68dqxyjrr3jstk5tkeqzgla86j39mdh7yxsy889tr"
+  - path_regex: provision/ansible/.*\.sops\.ya?ml$
+    unencrypted_regex: "^(kind)$"
+    age: age10kjypcen2ay6r3sgt68dqxyjrr3jstk5tkeqzgla86j39mdh7yxsy889tr
