@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+---
+version: "3"
+
+tasks:
+  encrypt:
+    desc: Encrypt sops secret
+    cmd: sops --encrypt --in-place {{.CLI_ARGS}}
+
+  decrypt:
+    desc: Decrypt sops secret
+    cmd: sops --decrypt --in-place {{.CLI_ARGS}}

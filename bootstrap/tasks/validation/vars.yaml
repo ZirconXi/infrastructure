@@ -1,0 +1,15 @@
+---
+- name: Verify required bootstrap vars are set
+  ansible.builtin.assert:
+    that:
+      - item in vars
+      - vars[item] != None
+      - vars[item] != ""
+    success_msg: Required bootstrap var {{ item }} exists and is defined
+    fail_msg: Required bootstrap var {{ item }} does not exists or is not defined
+  loop:
+    - bootstrap_age_public_key
+    - bootstrap_github_repository_name
+    - bootstrap_github_repository_branch
+    - bootstrap_github_username
+    - bootstrap_timezone

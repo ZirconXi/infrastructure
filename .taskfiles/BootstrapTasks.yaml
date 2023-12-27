@@ -12,3 +12,11 @@ tasks:
       # Python dependency
       - poetry install --no-root
       - poetry run ansible-galaxy install --force --role-file {{.ROOT_DIR}}/requirements.yaml
+
+  main:
+    desc: Bootstrap
+    preconditions:
+      - sh: command -v sops
+        msg: sops is not installed.
+    cmds:
+      - ansible-playbook {{.BOOTSTRAP_DIR}}/main.yaml

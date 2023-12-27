@@ -1,0 +1,14 @@
+---
+- name: Bootstrap
+  hosts: localhost
+  connection: local
+
+  pre_tasks:
+    - name: Load vars from sops secrets
+      community.sops.load_vars:
+        file: "../secrets/bootstrap.sops.yaml"
+        expressions: evaluate-on-load
+
+  tasks:
+    - name: Validation
+      ansible.builtin.include_tasks: tasks/validation/main.yaml

@@ -28,3 +28,5 @@ roles/**
 # Exclude sensitive data
 secrets/**
 !secrets/.gitkeep
+!secrets/*.sops.yaml
+!secrets/*.sample.yaml
