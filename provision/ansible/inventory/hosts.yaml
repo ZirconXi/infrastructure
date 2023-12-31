@@ -3,3 +3,7 @@
 all:
   hosts:
     billow: {}
+
+home-network:
+  hosts:
+    openwrt-guest: {}
