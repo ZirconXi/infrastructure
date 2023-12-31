@@ -14,3 +14,12 @@ dockerapp_traefik_app_domain: "traefik.{{ dockerapp_domain }}"
 dockerapp_traefik_app_cf_dns_api_token: ""
 dockerapp_traefik_app_cert_acme_email: ""
 dockerapp_traefik_app_basicauth_users: ""
+
+# ================================================================
+# AdguardHome
+# ================================================================
+dockerapp_adguardhome_app_dir: "{{ dockerapp_data_dir }}/adguardhome-app"
+dockerapp_adguardhome_app_recreate: false
+dockerapp_adguardhome_app_restart: false
+
+dockerapp_adguardhome_app_domain: "adguard.{{ dockerapp_domain }}"

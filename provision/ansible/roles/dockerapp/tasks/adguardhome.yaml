@@ -1,0 +1,37 @@
+---
+
+- name: AdguardHome | Ensure app directory exists
+  ansible.builtin.file:
+    state: directory
+    path: "{{ item }}"
+    mode: "0644"
+  loop:
+    - "{{ dockerapp_adguardhome_app_dir }}"
+    - "{{ dockerapp_adguardhome_app_dir }}/work"
+    - "{{ dockerapp_adguardhome_app_dir }}/conf"
+
+- name: AdguardHome | Deploy
+  community.docker.docker_container:
+    image: adguard/adguardhome:v0.107.43
+    name: adguardhome-app
+    recreate: "{{ dockerapp_traefik_app_recreate }}"
+    restart: "{{ dockerapp_traefik_app_restart }}"
+    restart_policy: always
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - "{{ dockerapp_adguardhome_app_dir }}/work:/opt/adguardhome/work"
+      - "{{ dockerapp_adguardhome_app_dir }}/conf:/opt/adguardhome/conf"
+    networks:
+      - name: "{{ dockerapp_ingress_network }}"
+    published_ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    labels:
+      traefik.enable: "true"
+      # routers
+      traefik.http.routers.adguardhome-app.rule: "Host(`{{ dockerapp_adguardhome_app_domain }}`)"
+      traefik.http.routers.adguardhome-app.entrypoints: "web,websecure"
+      traefik.http.routers.adguardhome-app.service: "adguardhome-app@docker"
+      # services
+      traefik.http.services.adguardhome-app.loadbalancer.server.port: "3000"

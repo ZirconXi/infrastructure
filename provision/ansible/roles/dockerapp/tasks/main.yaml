@@ -11,3 +11,10 @@
     apply:
       tags: always
   tags: always
+
+- name: AdguardHome
+  ansible.builtin.include_tasks: adguardhome.yaml
+  args:
+    apply:
+      tags: adguardhome
+  tags: never,adguardhome
