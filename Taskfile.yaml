@@ -6,6 +6,7 @@ env:
   SOPS_AGE_KEY_FILE: "{{.ROOT_DIR}}/secrets/age.key"
 
 vars:
+  ANSIBLE_DIR: "{{.ROOT_DIR}}/provision/ansible"
   BOOTSTRAP_DIR: "{{.ROOT_DIR}}/bootstrap"
   SECRETS_DIR: "{{.ROOT_DIR}}/secrets"
 

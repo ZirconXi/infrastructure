@@ -6,3 +6,7 @@ tasks:
   ping:
     desc: Try to connect to host
     cmd: ansible -m ping {{.CLI_ARGS}}
+
+  system:debian:
+    desc: Manage debian system
+    cmd: ansible-playbook {{.ANSIBLE_DIR}}/playbooks/system/debian.yaml {{.CLI_ARGS}}

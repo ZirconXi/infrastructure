@@ -1,0 +1,41 @@
+---
+
+- name: Manage debian system
+  hosts: "{{ _hosts | default(omit) }}"
+
+  tasks:
+    - name: Hostname
+      ansible.builtin.import_role:
+        name: debian
+        tasks_from: hostname
+      tags: debian-hostname
+
+    - name: Timezone
+      ansible.builtin.import_role:
+        name: debian
+        tasks_from: timezone
+      tags: debian-timezone
+
+    - name: Package
+      ansible.builtin.import_role:
+        name: debian
+        tasks_from: package
+      tags: debian-package
+
+    - name: Machine ID
+      ansible.builtin.import_role:
+        name: debian
+        tasks_from: machine-id
+      tags: never,debian-machineid
+
+    - name: OpenSSH
+      ansible.builtin.import_role:
+        name: debian
+        tasks_from: openssh
+      tags: debian-openssh
+
+    - name: Reboot
+      ansible.builtin.import_role:
+        name: debian
+        tasks_from: reboot
+      tags: never,debian-reboot
