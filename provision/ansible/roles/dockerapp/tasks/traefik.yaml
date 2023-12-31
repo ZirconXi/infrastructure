@@ -1,0 +1,69 @@
+---
+- name: Traefik | Verify required vars are set
+  ansible.builtin.assert:
+    that:
+      - item in vars
+      - vars[item] != ""
+    success_msg: Required var {{ item }} exists and is defined
+    fail_msg: Required var {{ item }} does not exists or is not defined
+  loop:
+    - dockerapp_domain
+    - dockerapp_traefik_app_cf_dns_api_token
+    - dockerapp_traefik_app_cert_acme_email
+    - dockerapp_traefik_app_basicauth_users
+
+- name: Traefik | Ensure ingress network exists
+  community.docker.docker_network:
+    name: "{{ dockerapp_ingress_network }}"
+    state: present
+
+- name: Traefik | Ensure app directory exists
+  ansible.builtin.file:
+    state: directory
+    path: "{{ dockerapp_traefik_app_dir }}"
+    mode: "0644"
+
+- name: Traefik | Copy configuration file
+  ansible.builtin.template:
+    src: traefik/config.yaml.j2
+    dest: "{{ dockerapp_traefik_app_dir }}/config.yaml"
+    mode: "0644"
+
+- name: Traefik | Deploy
+  community.docker.docker_container:
+    image: docker.io/traefik:v2.2
+    name: traefik-app
+    recreate: "{{ dockerapp_traefik_app_recreate }}"
+    restart: "{{ dockerapp_traefik_app_restart }}"
+    restart_policy: always
+    command: --configfile=/etc/traefik/config.yaml
+    env:
+      CF_DNS_API_TOKEN: "{{ dockerapp_traefik_app_cf_dns_api_token }}"
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "{{ dockerapp_traefik_app_dir }}:/etc/traefik"
+    networks:
+      - name: "{{ dockerapp_ingress_network }}"
+    published_ports:
+      - "80:80/tcp"
+      - "443:443/tcp"
+    healthcheck:
+      test: "wget -q --spider --proxy off localhost:8080/ping || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    labels:
+      traefik.enable: "true"
+      # routers
+      traefik.http.routers.traefik-proxy-dashboard.rule: "Host(`{{ dockerapp_traefik_app_domain }}`)"
+      traefik.http.routers.traefik-proxy-dashboard.entrypoints: "web,websecure"
+      traefik.http.routers.traefik-proxy-dashboard.service: "api@internal"
+      traefik.http.routers.traefik-proxy-dashboard.middlewares: "basic-auth@docker"
+      # services
+      traefik.http.services.traefik-proxy-dashboard.loadbalancer.server.port: "8080"
+      # middlewares
+      traefik.http.middlewares.basic-auth.basicauth.users: "{{ dockerapp_traefik_app_basicauth_users }}"
+      traefik.http.middlewares.basic-auth.basicauth.removeheader: "true"

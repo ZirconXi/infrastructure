@@ -1,0 +1,16 @@
+---
+dockerapp_data_dir: "/docker"
+dockerapp_ingress_network: ingress-traefik
+dockerapp_domain: ""
+
+# ================================================================
+# Traefik
+# ================================================================
+dockerapp_traefik_app_dir: "{{ dockerapp_data_dir }}/traefik-app"
+dockerapp_traefik_app_recreate: false
+dockerapp_traefik_app_restart: false
+
+dockerapp_traefik_app_domain: "traefik.{{ dockerapp_domain }}"
+dockerapp_traefik_app_cf_dns_api_token: ""
+dockerapp_traefik_app_cert_acme_email: ""
+dockerapp_traefik_app_basicauth_users: ""

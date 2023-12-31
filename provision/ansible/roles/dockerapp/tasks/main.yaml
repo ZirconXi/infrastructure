@@ -1,0 +1,13 @@
+---
+- name: Ensure data root directory exist
+  ansible.builtin.file:
+    state: directory
+    path: "{{ dockerapp_data_dir }}"
+    mode: "0644"
+
+- name: Traefik
+  ansible.builtin.include_tasks: traefik.yaml
+  args:
+    apply:
+      tags: always
+  tags: always

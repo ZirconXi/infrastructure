@@ -1,0 +1,57 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+entryPoints:
+  web:
+    address: ":80"
+    forwardedHeaders:
+      trustedIPs:
+        - "0.0.0.0/0"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    address: ":443"
+    forwardedHeaders:
+      trustedIPs:
+        - "0.0.0.0/0"
+    http:
+      tls:
+        certResolver: letsencrypt
+        domains:
+          - main: "{{ dockerapp_domain }}"
+            sans: "*.{{ dockerapp_domain }}"
+  ping:
+    address: ":8080"
+providers:
+  docker:
+    watch: true
+    exposedByDefault: false
+    network: "{{ dockerapp_ingress_network }}"
+api:
+  insecure: false
+  dashboard: true
+ping:
+  entryPoint: "ping"
+log:
+  level: INFO
+  format: json
+  filePath: /dev/stdout
+accessLog:
+  format: json
+  filePath: /dev/stdout
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      email: "{{ dockerapp_traefik_app_cert_acme_email }}"
+      storage: /etc/traefik/acme.json
+      dnschallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+        resolvers:
+          - 1.1.1.1:53
+          - 8.8.8.8:53
+          - 9.9.9.9:53
