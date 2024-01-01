@@ -18,3 +18,10 @@
     apply:
       tags: adguardhome
   tags: never,adguardhome
+
+- name: Bitwarden
+  ansible.builtin.include_tasks: bitwarden.yaml
+  args:
+    apply:
+      tags: bitwarden
+  tags: never,bitwarden

@@ -23,3 +23,19 @@ dockerapp_adguardhome_app_recreate: false
 dockerapp_adguardhome_app_restart: false
 
 dockerapp_adguardhome_app_domain: "adguard.{{ dockerapp_domain }}"
+
+# ================================================================
+# Bitwarden
+# ================================================================
+dockerapp_bitwarden_app_dir: "{{ dockerapp_data_dir }}/bitwarden-app"
+dockerapp_bitwarden_app_recreate: false
+dockerapp_bitwarden_app_restart: false
+
+dockerapp_bitwarden_app_domain: "bitwarden.{{ dockerapp_domain }}"
+dockerapp_bitwarden_app_signups_allowed: "false"
+dockerapp_bitwarden_app_smtp_host: ""
+dockerapp_bitwarden_app_smtp_port: ""
+dockerapp_bitwarden_app_smtp_security: ""
+dockerapp_bitwarden_app_smtp_from: ""
+dockerapp_bitwarden_app_smtp_username: ""
+dockerapp_bitwarden_app_smtp_password: ""
