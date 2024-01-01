@@ -1,0 +1,27 @@
+---
+
+- name: Manage docker host
+  hosts: "{{ _hosts | default(omit) }}"
+
+  pre_tasks:
+    - name: Docker | Install python packages
+      environment:
+        PIP_ROOT_USER_ACTION: ignore
+      ansible.builtin.pip:
+        extra_args: --break-system-packages
+        name: "docker==6.1.3"
+        state: present
+
+    - name: Docker | Install docker engine
+      ansible.builtin.include_role:
+        name: geerlingguy.docker
+      vars:
+        docker_install_compose: false
+        docker_daemon_options:
+          log-driver: json-file
+          log-opts:
+            max-size: 128m
+
+  roles:
+    - name: Docker | Deploy applications
+      role: dockerapp

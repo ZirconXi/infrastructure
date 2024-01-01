@@ -10,3 +10,7 @@ tasks:
   system:debian:
     desc: Manage debian system
     cmd: ansible-playbook {{.ANSIBLE_DIR}}/playbooks/system/debian.yaml {{.CLI_ARGS}}
+
+  docker:
+    desc: Manage docker host
+    cmd: ansible-playbook {{.ANSIBLE_DIR}}/playbooks/docker/main.yaml {{.CLI_ARGS}}
